@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2013-2014, NVIDIA Corporation.  All rights reserved.
- * Johhnny Qiu <joqiu@nvidia.com>
- * Shu Zhang <chazhang@nvidia.com>
+ * Copyright (c) 2015 Linaro Ltd.
+ * Bernhard Rosenkränzer <Bernhard.Rosenkranzer@linaro.org>
+ * based on the implementation found in musl 1.1.8
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are
@@ -29,11 +29,19 @@
  * IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <float.h>
 #include <private/bionic_asm.h>
 
-ENTRY(sqrtf)
+ENTRY(fabs)
+    vmov.f64	d0, r0, r1
+    vabs.f64	d0, d0
+    vmov.f64	r0, r1, d0
+    bx		lr
+END(fabs)
+
+ENTRY(fabsf)
     vmov.f32    s0, r0
-    vsqrt.f32   s0, s0
+    vabs.f32    s0, s0
     vmov.f32    r0, s0
     bx          lr
-END(sqrtf)
+END(fabsf)
